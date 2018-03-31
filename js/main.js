@@ -2,32 +2,25 @@ $(document).ready(function($){
 	var contentSections = $('.cd-section'),
 		navigationItems = $('#cd-vertical-nav a');
 
+	if (Math.random() > 0.5)
+	    $('#section1').addClass('black');
+	$('h1').addClass('toggle');
+
 	var dots = [];
-	// var initialOffset = $('.cd-dot:first').offset().top;
     var dotsObj = $('li a');
 	dotsObj.each(function () {
 		dots.push($(this).offset().top - $(window).scrollTop());
     });
-	$.each(dots, function (key, obj) {
-		console.log(key + ' ' + obj);
-    });
-	// console.log(initialOffset);
 
 	updateNavigation();
 	$(window).on('scroll', function(){
 		updateNavigation();
-		// console.log(($(window).height() - $(window).scrollTop()) + ' ' + (initialOffset));
-		// var offset = Math.abs($(window).height() - $(window).scrollTop()) % $(window).height();
 		var offset = ($(window).scrollTop() % $(window).height());
 		console.log(($(window).scrollTop() % $(window).height()));
 		var order = parseInt($(window).scrollTop() / $(window).height(), 10) % 2;
-        // console.log(order);
         if (order == 0)
 		{
             dotsObj.each(function () {
-                // for(var i = 0; i < dots.length; i++)
-                // 	if (dots[i] > offset)
-                // 		console.log('*');
                 if (dots[$(this).attr('data-number') - 1] > $(window).height() - offset - 10)
                     $(this).addClass('reversed');
                 else

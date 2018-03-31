@@ -68,7 +68,8 @@ Main components
 		background-color: black;
 
 		p {
-			color: lighten($color-1, 30%);
+			//color: lighten($color-1, 30%);
+			color: white;
 		}
 	}
 
@@ -76,7 +77,8 @@ Main components
 		background-color: white;
 
 		p {
-			color: lighten($color-2, 30%);
+			//color: lighten($color-2, 30%);
+			color: black;
 		}
 	}
 
@@ -92,24 +94,30 @@ Main components
 		color: $color-4;
 		margin: 0;
 		font-weight: 300;
-		text-transform: uppercase;
-		@include font-size(20px);
+		//text-transform: uppercase;
+		@include font-size(30px);
+		letter-spacing: -.98em;
+		transition: letter-spacing 1s;
+	}
+
+	h1.toggle {
+		letter-spacing: .2em;
 	}
 
 	p {
 		line-height: 1.6;
 	}
 
-	@include MQ(M) {
-		h1 {
-			@include font-size(30px);
-		}
-
-		p {
-			@include font-size(20px);
-			line-height: 2;
-		}
-	}
+	//@include MQ(M) {
+	//	h1 {
+	//		@include font-size(30px);
+	//	}
+    //
+	//	p {
+	//		@include font-size(20px);
+	//		line-height: 2;
+	//	}
+	//}
 }
 
 .cd-scroll-down {
@@ -364,8 +372,64 @@ Main components
 		}
 	}
 
-	.sign-in-button {
+	.left-nav {
 		float: right;
+		display: flex;
+		align-items: center;
+		height: 100%;
 
+		.mdl-button {
+			margin: 0 5px;
+		}
 	}
+}
+
+//@include MQ(M) {
+//	.cd-section {
+//		background-size: cover !important;
+//	}
+//}
+
+#section1 {
+	background: url(../img/background-white.svg) no-repeat center;
+	background-size: cover;
+
+	h1 {
+		color: black;
+	}
+}
+
+#section1.black {
+	background: url(../img/background-black.svg) no-repeat center black;
+	background-size: cover;
+
+	h1 {
+		color: white;
+	}
+}
+
+#section3 {
+	background: url(../img/train.svg) no-repeat center black;
+	background-size: cover;
+}
+
+#section4 {
+	background: url(../img/check.svg) no-repeat center;
+	background-size: cover;
+}
+
+.pulse {
+	animation-name: pulse_animation;
+	animation-duration: 3s;
+	transform-origin:70% 70%;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}
+
+@keyframes pulse_animation {
+	0% { transform: translateY(0px); }
+	25% { transform: translateY(5px); }
+	50% { transform: translateY(10px); }
+	75% { transform: translateY(5px); }
+	100% { transform: translateY(0px); }
 }
