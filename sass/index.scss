@@ -62,12 +62,12 @@ Main components
 .cd-section {
 	min-height: 100%;
 	position: relative;
-	padding: 2em 122px;
+	//padding: 2em 122px;
 
 	&:nth-of-type(odd) {
 		background-color: black;
 
-		p {
+		h1, p {
 			//color: lighten($color-1, 30%);
 			color: white;
 		}
@@ -76,23 +76,30 @@ Main components
 	&:nth-of-type(even) {
 		background-color: white;
 
-		p {
+		h1, p {
 			//color: lighten($color-2, 30%);
 			color: black;
 		}
 	}
 
-	h1, p {
+	.cd-section-content {
+		width: 100%;
 		position: absolute;
 		@include center;
+	}
+
+	h1, p {
+		//position: absolute;
+		//@include center;
 		width: 90%;
+		margin: 0 auto;
 		max-width: $M;
 		text-align: center;
 	}
 
 	h1 {
+		display: none;
 		color: $color-4;
-		margin: 0;
 		font-weight: 300;
 		//text-transform: uppercase;
 		@include font-size(30px);
@@ -219,6 +226,12 @@ Main components
 
 /* Touch devices */
 @include MQ(M) {
+	.cd-section {
+		h1 {
+			display: block;
+		}
+	}
+
 	 .cd-nav-trigger {
 		display: block;
 		z-index: 2;
@@ -363,7 +376,7 @@ Main components
 		}
 	}
 
-	&:hover {
+	&:hover, &.focus {
 		//transform: scaleY(1);
 		height: 100px;
 
@@ -378,33 +391,30 @@ Main components
 		align-items: center;
 		height: 100%;
 
-		.mdl-button {
-			margin: 0 5px;
+		@include MQ(420px) {
+			.mdl-button:last-child {
+				display: none;
+			}
 		}
 	}
 }
-
-//@include MQ(M) {
-//	.cd-section {
-//		background-size: cover !important;
-//	}
-//}
 
 #section1 {
 	background: url(../img/background-white.svg) no-repeat center;
 	background-size: cover;
 
 	h1 {
+		display: block;
 		color: black;
 	}
-}
 
-#section1.black {
-	background: url(../img/background-black.svg) no-repeat center black;
-	background-size: cover;
+	&.black {
+		background: url(../img/background-black.svg) no-repeat center black;
+		background-size: cover;
 
-	h1 {
-		color: white;
+		h1 {
+			color: white;
+		}
 	}
 }
 
@@ -416,6 +426,21 @@ Main components
 #section4 {
 	background: url(../img/check.svg) no-repeat center;
 	background-size: cover;
+}
+
+#section5 {
+	background: url(../img/learn.svg) no-repeat center black;
+	background-size: cover;
+}
+
+#section6 .halo {
+	width: 250px;
+	position: absolute;
+	@include center(xy);
+}
+
+.mdl-button {
+	margin: 0 5px;
 }
 
 .pulse {

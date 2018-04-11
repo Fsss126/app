@@ -16,9 +16,9 @@ $(document).ready(function($){
 	$(window).on('scroll', function(){
 		updateNavigation();
 		var offset = ($(window).scrollTop() % $(window).height());
-		console.log(($(window).scrollTop() % $(window).height()));
-		var order = parseInt($(window).scrollTop() / $(window).height(), 10) % 2;
-        if (order == 0)
+		var order = parseInt($(window).scrollTop() / $(window).height(), 10);
+        // console.log(offset + ' ' + order);
+        if (order % 2 == 0)
 		{
             dotsObj.each(function () {
                 if (dots[$(this).attr('data-number') - 1] > $(window).height() - offset - 10)
@@ -29,15 +29,21 @@ $(document).ready(function($){
 		}
 		else {
             dotsObj.each(function () {
-                // for(var i = 0; i < dots.length; i++)
-                // 	if (dots[i] > offset)
-                // 		console.log('*');
                 if (dots[$(this).attr('data-number') - 1] > $(window).height() - offset - 10)
                     $(this).removeClass('reversed');
                 else
                     $(this).addClass('reversed');
             });
 		}
+		if ($(window).scrollTop() > $(window).height()*5 - 50)
+        {
+            console.log('yas');
+            $('.top-menu').addClass('focus');
+        }
+        else {
+            if ($('.top-menu').hasClass('focus'))
+                $('.top-menu').removeClass('focus');
+        }
         if ($(window).scrollTop() > 150)
         {
             if (!$('.top-menu').hasClass('shrink'))
@@ -49,49 +55,32 @@ $(document).ready(function($){
         }
 	});
 
-    // var scroll = true;
-    // var section = $('section').first();
-    // var lastScrollTop = 0;
-    // $(window).scroll(function(event){
-    //     if (scroll)
-		// {
-    //         var st = $(this).scrollTop();
-    //         if (st > lastScrollTop){
-    //             // downscroll code
-    //             smoothScroll(section.next());
-    //         } else {
-    //             // upscroll code
-    //             smoothScroll(section.prev());
-    //         }
-    //         // scroll = false;
-		// }
-    //     lastScrollTop = st;
-    // });
+    $('form').submit(function (e) {
+        $(this).find('.mdl-textfield input').each(function () {
+            if ($(this).val() == '')
+            {
+                var input = $(this);
+                e.preventDefault();
+                input.parents('.mdl-textfield').addClass('unset');
+                input.change(function () {
+                    $(this).parents('.unset').removeClass('unset');
+                })
+            }
+        });
+    });
 
-    // $('section').mousewheel(function(e) {
-    //     // $('p').text(e.deltaY);
-    //     //
-    //     if (e.deltaY>0) {
-    //         console.log('up');
-    //     }
-    //     else console.log('down');
-    //
-    //     e.preventDefault();
-    //     if (scroll)
-		// {
-    //         if (e.deltaY>0) {
-    //             smoothScroll($(this).prev());
-    //             scroll = false;
-    //         }
-    //         else {
-    //             smoothScroll($(this).next());
-    //             scroll = false;
-    //         }
-    //         setTimeout(function () {
-    //             scroll = true;
-    //         }, 3000);
-		// }
-    // });
+
+    var snackbarContainer = document.getElementById('snackbar');
+    console.log(snackbarContainer);
+    // 'use strict';
+    var data = {message: 'Log in failed'};
+
+    setTimeout(function () {
+        if (document.querySelector('.login-failed') != null)
+        {
+            snackbarContainer.MaterialSnackbar.showSnackbar(data);
+        }
+    },100);
 
 	//smooth scroll to the section
 	navigationItems.on('click', function(event){

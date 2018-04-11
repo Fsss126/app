@@ -16,5 +16,12 @@ $L:     769px;
   @else if $canvas == L {
    @media only screen and (min-width: $L) { @content; }
   }
+  @else {
+    @media only screen and (max-width: $canvas) { @content; }
+  }
+}
+
+@mixin L($canvas) {
+  @media only screen and (min-width: $canvas) { @content; }
 }
 

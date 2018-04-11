@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=Libre+Barcode+128|Libre+Barcode+128+Text");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 /* -------------------------------- 
 
 Primary style
@@ -47,17 +48,17 @@ Main components
 -------------------------------- */
 .cd-section {
   min-height: 100%;
-  position: relative;
-  padding: 2em 122px; }
+  position: relative; }
   .cd-section:nth-of-type(odd) {
     background-color: black; }
-    .cd-section:nth-of-type(odd) p {
+    .cd-section:nth-of-type(odd) h1, .cd-section:nth-of-type(odd) p {
       color: white; }
   .cd-section:nth-of-type(even) {
     background-color: white; }
-    .cd-section:nth-of-type(even) p {
+    .cd-section:nth-of-type(even) h1, .cd-section:nth-of-type(even) p {
       color: black; }
-  .cd-section h1, .cd-section p {
+  .cd-section .cd-section-content {
+    width: 100%;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -65,13 +66,15 @@ Main components
     right: auto;
     -webkit-transform: translateX(-50%) translateY(-50%);
     -ms-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%); }
+  .cd-section h1, .cd-section p {
     width: 90%;
+    margin: 0 auto;
     max-width: 768px;
     text-align: center; }
   .cd-section h1 {
+    display: none;
     color: #fff;
-    margin: 0;
     font-weight: 300;
     font-size: 30px;
     font-size: 1.875rem;
@@ -182,6 +185,8 @@ Main components
 
 /* Touch devices */
 @media only screen and (max-width: 768px) {
+  .cd-section h1 {
+    display: block; }
   .cd-nav-trigger {
     display: block;
     z-index: 2;
@@ -310,9 +315,9 @@ Main components
     .top-menu.shrink .logo {
       color: white;
       font-family: 'Libre Barcode 128', cursive; }
-  .top-menu:hover {
+  .top-menu:hover, .top-menu.focus {
     height: 100px; }
-    .top-menu:hover .logo {
+    .top-menu:hover .logo, .top-menu.focus .logo {
       font-family: 'Libre Barcode 128 Text', cursive; }
   .top-menu .left-nav {
     float: right;
@@ -325,22 +330,23 @@ Main components
         -ms-flex-align: center;
             align-items: center;
     height: 100%; }
-    .top-menu .left-nav .mdl-button {
-      margin: 0 5px; }
+    @media only screen and (max-width: 420px) {
+      .top-menu .left-nav .mdl-button:last-child {
+        display: none; } }
 
 #section1 {
   background: url(../img/background-white.svg) no-repeat center;
   -webkit-background-size: cover;
           background-size: cover; }
   #section1 h1 {
+    display: block;
     color: black; }
-
-#section1.black {
-  background: url(../img/background-black.svg) no-repeat center black;
-  -webkit-background-size: cover;
-          background-size: cover; }
-  #section1.black h1 {
-    color: white; }
+  #section1.black {
+    background: url(../img/background-black.svg) no-repeat center black;
+    -webkit-background-size: cover;
+            background-size: cover; }
+    #section1.black h1 {
+      color: white; }
 
 #section3 {
   background: url(../img/train.svg) no-repeat center black;
@@ -351,6 +357,25 @@ Main components
   background: url(../img/check.svg) no-repeat center;
   -webkit-background-size: cover;
           background-size: cover; }
+
+#section5 {
+  background: url(../img/learn.svg) no-repeat center black;
+  -webkit-background-size: cover;
+          background-size: cover; }
+
+#section6 .halo {
+  width: 250px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  bottom: auto;
+  right: auto;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%); }
+
+.mdl-button {
+  margin: 0 5px; }
 
 .pulse {
   -webkit-animation-name: pulse_animation;

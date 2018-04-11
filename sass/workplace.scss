@@ -1,0 +1,453 @@
+@import 'variables'; // colors, fonts etc...
+@import 'mixins'; // custom mixins
+@import 'layout'; // responsive grid and media queries
+@import 'fonts';
+
+//.mdl-layout__header, .mdl-layout__drawer
+//{
+//	position: static;
+//}
+
+
+@include MQ(L) {
+  .mdl-layout__obfuscator.is-visible {
+    display: none;
+  }
+}
+
+:focus {
+	outline: none;
+}
+
+.mdl-layout__drawer
+{
+	@include MQ(L) {
+      @include MQ(1024px) {
+        margin-top: 56px;
+        height: calc(100% - 56px);
+      }
+      margin-top: 64px;
+      height: calc(100% - 64px);
+      &.opened {
+        transform: translateX(0);
+      }
+      &.is-visible {
+        transform: translateX(-250px);
+      }
+	}
+
+	@include MQ(M)
+	{
+      margin-top: 0;
+      height: 100%;
+	}
+}
+
+@include MQ(L) {
+  .mdl-layout__content {
+    transition-duration: .2s;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-property: margin-left;
+    &.opened {
+      margin-left: 240px;
+    }
+  }
+}
+
+.mdl-layout__drawer-button:hover {
+  background: #ffffff36;
+  border-radius: 50%;
+}
+
+.mdl-layout__header {
+  background-color: black;
+}
+
+.logo {
+  font-family: 'Libre Barcode 128 Text', cursive;
+  color: white;
+  position: absolute;
+  top: 0;
+  margin: 0;
+  transition: color 0.8s;
+  line-height: initial;
+
+  @include MQ(1024px) {
+    font-family: 'Libre Barcode 128', cursive;
+  }
+}
+
+.add-button {
+  z-index: 10;
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+}
+
+.mdl-layout__drawer .mdl-navigation {
+  padding-top: 32px;
+  .mdl-navigation__link {
+    font-size: 16px;
+    padding: 16px 24px;
+    i {
+      padding-right: 32px;
+    }
+
+    &.is-selected {
+      color: black;
+    }
+  }
+}
+
+.note-options {
+  position: relative;
+}
+
+
+.demo-card-event.mdl-card {
+  display: inline-block;
+  overflow: unset;
+  vertical-align: top;
+  cursor: pointer;
+  //width: 256px;
+  //height: 256px;
+  background: black;
+}
+.demo-card-event > .mdl-card__actions {
+  border-color: rgba(255, 255, 255, 0.2);
+  .mdl-card__title {
+    color: white;
+  }
+}
+.demo-card-event > .mdl-card__title {
+  align-items: flex-start;
+  min-height: 208px;
+  max-height: 308px;
+  overflow: hidden;
+  position: relative;
+  padding: 0 16px;
+
+  p {
+    margin: 14px 0;
+    width: 100%;
+  }
+
+  .shadow {
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 2px;
+    box-shadow: none;
+    background: linear-gradient(transparent, transparent, rgba(0, 0, 0, 0.7098039215686275), black);
+  }
+
+  .indicator {
+    position: absolute;
+    z-index: 5;
+    top: 16px;
+    right: 16px;
+
+    svg {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      background: black;
+      border-radius: 50%;
+      box-shadow: inset 0 0 0 3px #fafafa7a;
+      stroke-width: 5;
+    }
+    i {
+      position: absolute;
+    }
+
+    //&[done=true] {
+    //  i {
+    //    display: block;
+    //  }
+    //}
+  }
+}
+.demo-card-event > .mdl-card__actions {
+  position: relative;
+  display: flex;
+  box-sizing:border-box;
+  align-items: center;
+  .mdl-card__title {
+    color: white;
+    padding: 0 16px;
+  }
+}
+.demo-card-event > .mdl-card__actions > .material-icons {
+  padding-right: 10px;
+}
+.demo-card-event > .mdl-card__title,
+.demo-card-event > .mdl-card__actions,
+.demo-card-event > .mdl-card__actions > .mdl-button {
+  color: #fff;
+}
+
+.mdl-layout__drawer.is-visible~.mdl-layout__content.mdl-layout__content {
+  overflow-y: auto;
+}
+
+.cd-view-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 5;
+  cursor: pointer;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s, background 0.3s;
+  overflow: hidden;
+
+  .cd-view-popup__container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 90%;
+    height: 90%;
+    max-width: 600px;
+    background: white;
+    margin: 0 auto;
+    cursor: auto;
+    border-radius: 2px 2px 0 0;
+    transform: translateY(100%);
+    transition: transform 0.3s;
+  }
+
+  &.is-visible {
+    visibility: visible;
+    opacity: 1;
+
+    .cd-view-popup__container {
+      transform: translateY(0);
+    }
+  }
+
+  &.test {
+    background: black;
+  }
+
+  .note-title {
+    position: relative;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    input.mdl-card__title {
+      height: 52px;
+      padding: 16px 32px;
+      display: block;
+      border: none;
+      border-radius: 2px;
+      font-size: 16px;
+      background: white;
+      //white-space: nowrap;
+      //overflow: hidden;
+
+      @include L($M) {
+        width: calc(100% - 160px);
+      }
+
+      @include MQ(767px)
+      {
+        width: calc(100% - 20px);
+      }
+    }
+  }
+
+  #more-vert {
+    display: block;
+    position: absolute;
+    @include center(y);
+    right: 16px;
+    box-shadow: -24px 0 18px -1px #ffffff;
+  }
+
+  @include L($M) {
+    #more-vert {
+      display: none;
+    }
+  }
+
+  .edit-options, .test-options {
+    position: absolute;
+    display: none;
+    @include center(y);
+    right: 16px;
+
+    &>div {
+      position: relative;
+      display: inline-block;
+    }
+  }
+
+  .note-options {
+    position: absolute;
+    @include center(y);
+    right: 16px;
+    transition: all .4s;
+
+    @include L($M) {
+      box-shadow: -45px 0 18px -1px #ffffff;
+      //box-shadow: none;
+    }
+
+    &>div {
+      position: relative;
+      display: inline-block;
+    }
+
+    @include MQ(767px) {
+      transform: translate(-45%,-50%);
+      position: absolute;
+      right: 55px;
+      background: white;
+      border-radius: 50em;
+      opacity: 0;
+
+      &.show {
+        opacity: 1;
+        transform: translate(0,-50%);
+      }
+    }
+  }
+
+  .note-text-container {
+    position: absolute;
+    top: 53px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    padding: 0;
+
+    .note-text {
+      display: block;
+      resize: none;
+      padding: 16px 32px;
+      width: calc(100% - 64px);
+      position: absolute;
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      font-size: 14px;
+      line-height: 24px;
+    }
+  }
+
+  &.edit {
+    #more-vert {
+      display: none;
+    }
+
+    input.mdl-card__title {
+      width: calc(100% - 135px);
+    }
+
+    .note-options {
+      display: none;
+    }
+
+    .edit-options {
+      display: block;
+    }
+  }
+
+  &.test {
+    #more-vert {
+      display: none;
+    }
+
+    input.mdl-card__title {
+      width: calc(100% - 135px);
+    }
+
+    .note-options {
+      display: none;
+    }
+    .test-options {
+      display: block;
+    }
+  }
+}
+
+.page-content {
+  display: none;
+
+  &.is-selected {
+    display: flex;
+  }
+}
+
+.mdl-layout__header {
+  overflow-y: hidden;
+}
+
+[text-align=left] {
+  text-align: left;
+}
+[text-align=center] {
+  text-align: center;
+}
+
+.mdl-grid {
+  align-items: center;
+}
+
+input::placeholder {
+  color: rgba(0,0,0,.26);
+  font-size: 16px;
+}
+
+textarea::placeholder {
+  color: rgba(0,0,0,.26);
+}
+
+.empty-field::placeholder {
+  color: #d50000;
+}
+
+[chosen=true] {
+  background: buttonface;
+}
+
+#text-align-center i {
+  font-size: 21px;
+}
+
+#text-align-left i {
+  font-size: 22px;
+}
+
+.mdl-snackbar {
+  z-index: 6;
+}
+
+.mdl-menu {
+  a {
+    text-decoration: none;
+  }
+}
+
+.pulse-button {
+  position: relative;
+  //width: 100px;
+  //height: 100px;
+  border: none;
+  box-shadow: 0 0 0 0 rgba(158,158,158,.2);
+  border-radius: 50%;
+  cursor: pointer;
+  animation: pulse 1.25s infinite cubic-bezier(0.66, 0, 0, 1);
+}
+
+@keyframes pulse {to {box-shadow: 0 0 0 45px rgba(158,158,158,0);}}
+
+@import "tooltip";

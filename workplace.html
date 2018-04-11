@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Memorize</title>
+    <meta name="description" content="Learn texts by heart effectively"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="libs/mdl/material.min.css">
+    <link rel="stylesheet" href="css/workplace.css"> <!-- Resource style -->
+    <script src="https://webasr.yandex.net/jsapi/v1/webspeechkit.js" type="text/javascript"></script>
+
+    <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="icons/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+    <link rel="manifest" href="icons/manifest.json">
+    <meta name="msapplication-TileColor" content="#ffffff">
+    <meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
+    <meta name="theme-color" content="#ffffff">
+</head>
+<body>
+<script>
+    function loadScriptSync (src) {
+        var s = document.createElement('script');
+        s.src = src;
+        s.type = "text/javascript";
+        s.async = false;                                 // <-- this is important
+        document.getElementsByTagName('head')[0].appendChild(s);
+    }
+    loadScriptSync("libs/mdl/material.min.js");
+    loadScriptSync("js/workplace.js");
+</script>
+<div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
+    <div class="mdl-snackbar__text"></div>
+    <button class="mdl-snackbar__action" type="button"></button>
+</div>
+<!-- Always shows a header, even in smaller screens. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <h1 class="logo">Memorize</h1>
+            <!-- Add spacer, to align navigation to the right -->
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation. We hide it in small screens. -->
+            <nav class="mdl-navigation" style="position: relative">
+                <!-- Right aligned menu below button -->
+                <button id="demo-menu-lower-right" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">person</i>
+                </button>
+                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect"
+                    for="demo-menu-lower-right">
+                    <!--TODO add handlers-->
+                    <li id="setting-button" class="mdl-menu__item">Settings</li>
+                    <a href=""><li id="logout-button" class="mdl-menu__item">Log out</li></a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="mdl-layout__drawer opened">
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link" href="#all"><i class="material-icons">assignment</i>All texts</a>
+            <a class="mdl-navigation__link" href="#inprocess"><i class="material-icons">access_time</i>In process</a>
+            <a class="mdl-navigation__link" href="#learned"><i class="material-icons">assignment_turned_in</i>Learned</a>
+            <!--<img src="img/learned.svg" style="height: 24px;padding-right: 32px"> in learned-->
+        </nav>
+    </div>
+    <main class="mdl-layout__content opened">
+        <button id="add-button" class="add-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored">
+            <i class="material-icons">&#xE145;</i>
+        </button>
+        <div id="all" class="page-content mdl-grid">
+            <div note-id="12345" class="demo-card-event mdl-card mdl-shadow--2dp mdl-cell--12-col-phone mdl-cell--4-col-tablet mdl-cell mdl-cell--3-col">
+                <div class="mdl-card__title mdl-card--expand">
+                    <div class="indicator" percent="60"></div>
+                    <div class="shadow"></div>
+                    <p text-align="center">
+                        Я к вам пишу - чего же боле?
+                        Что я могу ещё сказать?
+                        Теперь, я знаю, в вашей воле
+                        Меня презреньем наказать.
+                        Но вы, к моей несчастной доле
+                        Хоть каплю жалости храня,
+                        Вы не оставите меня.
+                        Сначала я молчать хотела;
+                        Поверьте: моего стыда
+                        Вы не узнали б никогда,
+                        Когда б надежду я имела
+                        Хоть редко, хоть в неделю раз
+                        В деревне нашей видеть вас,
+                        Чтоб только слышать ваши речи,
+                        Вам слово молвить, и потом
+                        Всё думать, думать об одном
+                        И день и ночь до новой встречи.
+                        Но, говорят, вы нелюдим;
+                        В глуши, в деревне всё вам скучно,
+                        А мы... ничем мы не блестим,
+                        Хоть вам и рады простодушно.
+                    </p>
+                </div>
+                <div class="mdl-card__actions mdl-card--border">
+                    <a class="mdl-card__title">Письмо Татьяны к Онегину</a>
+                    <div class="mdl-layout-spacer"></div>
+                    <div class="note-options">
+                        <!--TODO add custom ids-->
+                        <button id="note-options12" class="note-options-button mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">more_vert</i>
+                        </button>
+                        <ul class="mdl-menu mdl-menu--top-right mdl-js-menu" for="note-options12">
+                            <li class="test-op mdl-menu__item">Test knowledge</li>
+                            <li class="mark-op mdl-menu__item">Mark as learned</li>
+                            <li class="edit-op mdl-menu__item">Edit</li>
+                            <li class="delete-op mdl-menu__item">Delete</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="inprocess" class="page-content mdl-grid"></div>
+        <div id="learned" class="page-content mdl-grid"></div>
+    </main>
+    <div class="cd-view-popup js-view-popup">
+        <div class="cd-view-popup__container">
+            <div class="note-title">
+                <input class="mdl-card__title" placeholder="Title" disabled>
+                <button id="more-vert" class="mdl-button mdl-js-button mdl-button--icon">
+                    <i class="material-icons">more_vert</i>
+                </button>
+                <div class="note-options mdl-shadow--2dp">
+                    <div data-balloon="Test knowledge" data-balloon-pos="up">
+                        <button id="popup-test" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">assignment</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Mark as learned" data-balloon-pos="up">
+                        <button id="popup-mark" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">assignment_turned_in</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Edit" data-balloon-pos="up">
+                        <button id="popup-edit" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">mode_edit</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Delete" data-balloon-pos="up">
+                        <button id="popup-delete" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="edit-options">
+                    <div data-balloon="Save" data-balloon-pos="up">
+                        <button id="edit-save" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">done</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Cancel" data-balloon-pos="up">
+                        <button id="edit-cancel" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">clear</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Align center" data-balloon-pos="up">
+                        <button id="text-align-center" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">format_align_center</i>
+                        </button>
+                    </div>
+                    <div data-balloon="No aligning" data-balloon-pos="up">
+                        <button id="text-align-left" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">format_align_justify</i>
+                        </button>
+                    </div>
+                </div>
+                <div class="test-options">
+                    <div data-balloon="Dictate" data-balloon-pos="up">
+                        <button id="mic" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">mic_none</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Restart" data-balloon-pos="up">
+                        <button id="test-restart" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">refresh</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Check" data-balloon-pos="up">
+                        <button id="test-check" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">done</i>
+                        </button>
+                    </div>
+                    <div data-balloon="Cancel" data-balloon-pos="up">
+                        <button id="test-cancel" class="mdl-button mdl-js-button mdl-button--icon">
+                            <i class="material-icons">clear</i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="note-text-container">
+                <textarea class="mdl-textfield__input note-text" type="text" placeholder="Text" disabled></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<script src="libs/mdl/material.min.js"></script>-->
+<script src="libs/jquery/jquery-3.2.1.min.js" type="text/javascript"></script>
+
+<!--<script src="js/workplace.js"></script>-->
+</body>
+</html>
