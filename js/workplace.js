@@ -23,7 +23,7 @@ var cardHtml = '<div class="demo-card-event mdl-card mdl-shadow--2dp mdl-cell--1
     '            </div>\n' +
     '        ';
 
-var apikey = 'f8c9e823-539f-4d81-bab7-e838166f71f2';
+var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
 var streamer;
 var is_listening;
 var note_text;
