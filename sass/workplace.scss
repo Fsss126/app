@@ -7,6 +7,14 @@
   box-sizing: border-box;
 }
 
+@include MQ(M) {
+  .mdl-layout__container {
+    height: auto;
+    .mdl-layout {
+      height: auto;
+    }
+  }
+}
 
 @include MQ(L) {
   .mdl-layout__obfuscator.is-visible {
