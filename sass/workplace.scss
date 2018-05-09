@@ -7,6 +7,14 @@
   box-sizing: border-box;
 }
 
+@include MQ(M) {
+  .mdl-layout__container {
+    height: auto;
+    .mdl-layout {
+      height: auto;
+    }
+  }
+}
 
 @include MQ(L) {
   .mdl-layout__obfuscator.is-visible {
@@ -424,6 +432,10 @@
   }
 
   &.train {
+    #more-vert {
+      display: none;
+    }
+
     .note-text {
       display: none;
     }
@@ -485,6 +497,10 @@
   }
 
   &.test-res {
+    #more-vert {
+      display: none;
+    }
+
     .note-title {
       input.mdl-card__title {
         opacity: 0;

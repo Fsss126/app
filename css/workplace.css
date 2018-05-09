@@ -4,6 +4,12 @@
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
 
+@media only screen and (max-width: 768px) {
+  .mdl-layout__container {
+    height: auto; }
+    .mdl-layout__container .mdl-layout {
+      height: auto; } }
+
 @media only screen and (min-width: 769px) {
   .mdl-layout__obfuscator.is-visible {
     display: none; } }
@@ -409,6 +415,8 @@
             transition: all .2s; }
             .cd-view-popup .note-text-container .training .text-container .text .word.revealed {
               color: black; }
+  .cd-view-popup.train #more-vert {
+    display: none; }
   .cd-view-popup.train .note-text {
     display: none; }
   .cd-view-popup.train .training {
@@ -439,6 +447,8 @@
       display: none; }
     .cd-view-popup.test .test-options {
       display: block; }
+  .cd-view-popup.test-res #more-vert {
+    display: none; }
   .cd-view-popup.test-res .note-title input.mdl-card__title {
     opacity: 0; }
   .cd-view-popup.test-res .note-title .percent {
