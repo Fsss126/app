@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="en">
 <head>
 	<meta charset="utf-8"/>
 	<title>Memorize</title>
@@ -7,10 +7,9 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="stylesheet" href="libs/mdl/material.min.css">
+	<link rel="stylesheet" href="css/libs.css">
 	<link rel="stylesheet" href="css/index.css"> <!-- Resource style -->
     <link rel="stylesheet" href="css/sign-in.css">
-	<!--<script src="libs/mdl/material.min.js"></script>-->
 
 	<link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
@@ -30,18 +29,7 @@
 	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png">
 	<meta name="theme-color" content="#ffffff">
 </head>
-<body class="login-failed">
-<script>
-    function loadScriptSync (src) {
-        var s = document.createElement('script');
-        s.src = src;
-        s.type = "text/javascript";
-        s.async = false;                                 // <-- this is important
-        document.getElementsByTagName('head')[0].appendChild(s);
-    }
-    loadScriptSync("libs/mdl/material.min.js");
-    loadScriptSync("js/main.js");
-</script>
+<body>
 
 <div id="snackbar" class="mdl-js-snackbar mdl-snackbar">
 	<div class="mdl-snackbar__text"></div>
@@ -150,16 +138,16 @@
             <li><a  data-signin="signup" data-type="signup">New account</a></li>
         </ul>
         <div class="cd-signin-modal__block js-signin-modal-block" data-type="login"> <!-- log in form -->
-            <form class="cd-signin-modal__form" action="login">
+            <form class="cd-signin-modal__form" action="/login">
 				<div class="mdl-textfield mdl-js-textfield">
 					<label class="cd-signin-modal__label cd-signin-modal__label--email cd-signin-modal__label--image-replace">E-mail</label>
-					<input class="mdl-textfield__input" type="email" name="login" placeholder="Email">
+					<input class="mdl-textfield__input" type="email" name="login" placeholder="Email" checking>
 					<label class="mdl-textfield__label" for="login"></label>
 					<span class="mdl-textfield__error">Email is not valid</span>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield">
 					<label class="cd-signin-modal__label cd-signin-modal__label--password cd-signin-modal__label--image-replace" for="password">Password</label>
-					<input class="mdl-textfield__input" type="password" name="password" id="password" minlength="6" placeholder="Password">
+					<input class="mdl-textfield__input" type="password" name="password" id="password" minlength="6" placeholder="Password" checking>
 					<button type="button" class="mdl-button mdl-js-button mdl-button--icon visibility js-hide-password">
 						<i class="material-icons">visibility</i>
 						<i class="material-icons">visibility_off</i>
@@ -172,7 +160,7 @@
 					<span class="mdl-checkbox__label">Remember me</span>
 				</label>
 				<div class="submit-buttons">
-					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="submit">
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="check-before-submit">
 						Sign in
 					</button>
 					<!-- Raised button with ripple -->
@@ -184,22 +172,22 @@
 		</div> <!-- cd-signin-modal__block -->
 
         <div class="cd-signin-modal__block js-signin-modal-block" data-type="signup"> <!-- sign up form -->
-            <form class="cd-signin-modal__form" action="register">
+            <form class="cd-signin-modal__form" action="/register">
 				<div class="mdl-textfield mdl-js-textfield">
 					<label class="cd-signin-modal__label cd-signin-modal__label--username cd-signin-modal__label--image-replace" for="login">E-mail</label>
-					<input class="mdl-textfield__input" type="text" name="login" id="name" placeholder="Name">
-					<label class="mdl-textfield__label" for="login"></label>
-					<span class="mdl-textfield__error">Email is not valid</span>
+					<input class="mdl-textfield__input" type="text" name="name" id="name" placeholder="Name" checking>
+					<label class="mdl-textfield__label" for="name"></label>
+					<span class="mdl-textfield__error">Required field</span>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield">
 					<label class="cd-signin-modal__label cd-signin-modal__label--email cd-signin-modal__label--image-replace">E-mail</label>
-					<input class="mdl-textfield__input" type="email" name="login" placeholder="Email">
+					<input class="mdl-textfield__input" type="email" name="login" placeholder="Email" checking>
 					<label class="mdl-textfield__label" for="login"></label>
 					<span class="mdl-textfield__error">Email is not valid</span>
 				</div>
 				<div class="mdl-textfield mdl-js-textfield">
 					<label class="cd-signin-modal__label cd-signin-modal__label--password cd-signin-modal__label--image-replace">Password</label>
-					<input class="mdl-textfield__input" type="password" name="password" minlength="6" placeholder="Password">
+					<input class="mdl-textfield__input" type="password" name="password" minlength="6" placeholder="Password" checking>
 					<button type="button" class="mdl-button mdl-js-button mdl-button--icon visibility js-hide-password">
 						<i class="material-icons">visibility</i>
 						<i class="material-icons">visibility_off</i>
@@ -208,11 +196,11 @@
 					<span class="mdl-textfield__error">Password is too short</span>
 				</div>
 				<label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="terms">
-					<input required name="terms" type="checkbox" id="terms" class="mdl-checkbox__input">
+					<input required name="terms" type="checkbox" id="terms" class="mdl-checkbox__input" checking>
 					<span class="mdl-checkbox__label">I agree with the <a href="">Terms</a></span>
 				</label>
 				<div class="submit-buttons">
-					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="submit">
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="check-before-submit">
 						Create account
 					</button>
 				</div>
@@ -224,15 +212,15 @@
 				<i class="material-icons">arrow_back</i>
 			</button>
 			<p class="cd-signin-modal__message">Lost your password? Please enter your email address. You will receive a link to create a new password.</p>
-            <form class="cd-signin-modal__form">
+            <form class="cd-signin-modal__form" action="/reset-password">
 				<div class="mdl-textfield mdl-js-textfield">
 					<label class="cd-signin-modal__label cd-signin-modal__label--email cd-signin-modal__label--image-replace" for="login">E-mail</label>
-					<input class="mdl-textfield__input" type="email" name="login" id="login" placeholder="Email">
+					<input class="mdl-textfield__input" type="email" name="login" id="login" placeholder="Email" checking>
 					<label class="mdl-textfield__label" for="login"></label>
 					<span class="mdl-textfield__error">Email is not valid</span>
 				</div>
 				<div class="submit-buttons">
-					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="submit">
+					<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="ajax-submit">
 						Reset password
 					</button>
 				</div>
@@ -242,8 +230,9 @@
     </div> <!-- cd-signin-modal__container -->
 </div> <!-- cd-signin-modal -->
 
-<script src="libs/jquery/jquery-3.2.1.min.js"></script>
-<!--<script src="js/main.js"></script>-->
-<script src="js/sign-in.js"></script>
+<script src="js/libs.min.js" type="text/javascript"></script>
+<script src="js/main.js" type="text/javascript"></script>
+<script src="js/form-submit.js" type="text/javascript"></script>
+<script src="js/sign-in.js" type="text/javascript"></script>
 </body>
 </html>

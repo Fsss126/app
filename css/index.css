@@ -377,6 +377,9 @@ Main components
 .mdl-button {
   margin: 0 5px; }
 
+.mdl-snackbar {
+  z-index: 6; }
+
 .pulse {
   -webkit-animation-name: pulse_animation;
           animation-name: pulse_animation;
