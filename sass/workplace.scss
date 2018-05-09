@@ -432,6 +432,10 @@
   }
 
   &.train {
+    #more-vert {
+      display: none;
+    }
+
     .note-text {
       display: none;
     }
@@ -493,6 +497,10 @@
   }
 
   &.test-res {
+    #more-vert {
+      display: none;
+    }
+
     .note-title {
       input.mdl-card__title {
         opacity: 0;
