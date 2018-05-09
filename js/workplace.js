@@ -29,7 +29,11 @@ var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
 =======
 //Yandex SpeechKit API key
 var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
+<<<<<<< HEAD
 //
+>>>>>>> dev
+=======
+//SpeechRecognition object
 >>>>>>> dev
 var streamer;
 var is_listening;
