@@ -24,17 +24,9 @@ var cardHtml = '<div class="demo-card-event mdl-card mdl-shadow--2dp mdl-cell--1
     '            </div>\n' +
     '        ';
 
-<<<<<<< HEAD
-var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
-=======
 //Yandex SpeechKit API key
 var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
-<<<<<<< HEAD
-//
->>>>>>> dev
-=======
 //SpeechRecognition object
->>>>>>> dev
 var streamer;
 var is_listening;
 var snackbarContainer;
@@ -451,11 +443,11 @@ function deleteNote(noteCard) {
         actionText: 'Undo'
     });
     setTimeout(function () {
-       if (noteToDelete != null)
-       {
-           //TODO add ajax query
-           $('[note-id="'+noteToDelete.attr('note-id')+'"]').remove();
-       }
+        if (noteToDelete != null)
+        {
+            //TODO add ajax query
+            $('[note-id="'+noteToDelete.attr('note-id')+'"]').remove();
+        }
     }, time);
     setTimeout(function () {
         time -= 3000;
@@ -532,11 +524,6 @@ function shuffle(a) {
     return a;
 }
 
-<<<<<<< HEAD
-function checkDictation() {
-    
-}
-=======
 function checkWord(word,check) {
     var next_word = popup.find('.text .word:not(.revealed)').first();
     console.log('');
@@ -688,4 +675,3 @@ function checkTest(original_text,typed_text) {
     $('.note-title').append(percent_view);
     //TODO: Add ajax query
 }
->>>>>>> dev
