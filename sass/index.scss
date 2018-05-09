@@ -443,6 +443,10 @@ Main components
 	margin: 0 5px;
 }
 
+.mdl-snackbar {
+	z-index: 6;
+}
+
 .pulse {
 	animation-name: pulse_animation;
 	animation-duration: 3s;

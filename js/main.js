@@ -17,7 +17,6 @@ $(document).ready(function($){
 		updateNavigation();
 		var offset = ($(window).scrollTop() % $(window).height());
 		var order = parseInt($(window).scrollTop() / $(window).height(), 10);
-        // console.log(offset + ' ' + order);
         if (order % 2 == 0)
 		{
             dotsObj.each(function () {
@@ -54,33 +53,6 @@ $(document).ready(function($){
                 $('.top-menu').removeClass('shrink');
         }
 	});
-
-    $('form').submit(function (e) {
-        $(this).find('.mdl-textfield input').each(function () {
-            if ($(this).val() == '')
-            {
-                var input = $(this);
-                e.preventDefault();
-                input.parents('.mdl-textfield').addClass('unset');
-                input.change(function () {
-                    $(this).parents('.unset').removeClass('unset');
-                })
-            }
-        });
-    });
-
-
-    var snackbarContainer = document.getElementById('snackbar');
-    console.log(snackbarContainer);
-    // 'use strict';
-    var data = {message: 'Log in failed'};
-
-    setTimeout(function () {
-        if (document.querySelector('.login-failed') != null)
-        {
-            snackbarContainer.MaterialSnackbar.showSnackbar(data);
-        }
-    },100);
 
 	//smooth scroll to the section
 	navigationItems.on('click', function(event){

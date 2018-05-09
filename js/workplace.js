@@ -9,10 +9,11 @@ var cardHtml = '<div class="demo-card-event mdl-card mdl-shadow--2dp mdl-cell--1
     '                    <div class="mdl-layout-spacer"></div>\n' +
     '                    <div class="note-options">\n' +
     '                        <!--TODO add custom ids-->\n' +
-    '                        <button id="note-options12" class="note-options-button mdl-button mdl-js-button mdl-button--icon">\n' +
+    '                        <button class="note-options-button mdl-button mdl-js-button mdl-button--icon">\n' +
     '                            <i class="material-icons">more_vert</i>\n' +
     '                        </button>\n' +
-    '                        <ul class="mdl-menu mdl-menu--top-right mdl-js-menu" for="note-options12">\n' +
+    '                        <ul class="mdl-menu mdl-menu--top-right mdl-js-menu">\n' +
+    '                            <li class="train-op mdl-menu__item">Train</li>\n' +
     '                            <li class="test-op mdl-menu__item">Test knowledge</li>\n' +
     '                            <li class="mark-op mdl-menu__item">Mark as learned</li>\n' +
     '                            <li class="edit-op mdl-menu__item">Edit</li>\n' +
@@ -23,15 +24,15 @@ var cardHtml = '<div class="demo-card-event mdl-card mdl-shadow--2dp mdl-cell--1
     '            </div>\n' +
     '        ';
 
-var apikey = 'f8c9e823-539f-4d81-bab7-e838166f71f2';
+//Yandex SpeechKit API key
+var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
+//
 var streamer;
 var is_listening;
-var note_text;
 var snackbarContainer;
 
 var popup;
 var openedNote;
-var noteToDelete;
 
 $(document).ready(function () {
     $('.mdl-layout__header').css('overflow-y','unset');
@@ -64,12 +65,21 @@ $(document).ready(function () {
     //close popup
     popup.on('click', function (e) {
         var target = $(e.target);
+        //close action options on smartphones
         if (target.prop('tagName') !== 'I')
             $('.note-title .note-options').removeClass('show');
-        if (target.hasClass('cd-view-popup'))
+        //close popup
+        if (target.hasClass('cd-view-popup') && !popup.hasClass('test'))
         {
-            popup.toggleClass('is-visible').removeClass('edit').removeClass('test');
+            popup.toggleClass('is-visible').removeClass('edit').removeClass('test').removeClass('new-note').removeClass('train');
             popup.find('[chosen=true]').removeAttr('chosen');
+            popup.find('.note-title input').attr('readonly','readonly');
+            popup.find('.note-text').attr('readonly','readonly');
+
+            is_listening = false;
+            $('#mic').html('<i class="material-icons">mic_none</i>').removeAttr('chosen').removeClass('pulse-button').parent().attr('data-balloon','Dictate');
+            if (streamer != null)
+                streamer.stop();
         }
     });
     //popup menu on small devices
@@ -78,9 +88,6 @@ $(document).ready(function () {
     });
     //add new note
     $('#add-button').on('click',function () {
-        // $('.page-content').append(s);
-        // componentHandler.upgradeDom();
-        // wireEvents();
         openNote(null);
         edit();
         popup.toggleClass('is-visible');
@@ -92,6 +99,7 @@ $(document).ready(function () {
         //TODO add ajax query
         var note_text_content = popup.find('.note-text').val();
         var note_title = popup.find('.note-title input').val();
+        var align = popup.find('.note-text').attr('text-align');
         var empty = false;
         if (note_text_content == '')
         {
@@ -107,24 +115,34 @@ $(document).ready(function () {
         {
             if (openedNote != null) //save changes in existing note
             {
-                //TODO add ajax query
-                popup.find('.note-title input').attr('disabled','disabled');
-                popup.find('.note-text').attr('disabled','disabled');
-                openedNote.find('.mdl-card__title p').html(note_text_content).attr('text-align',popup.find('.note-text').attr('text-align'));
-                openedNote.find('.mdl-card__actions .mdl-card__title').html(note_title);
+                var align_indicator = align == "left" ? 0 : 1;
+                var newnote = {"title":note_title,"text":note_text_content,"align":align_indicator};
+                popup.find('.note-title input').attr('readonly','readonly');
+                popup.find('.note-text').attr('readonly','readonly');
+                $('[note-id="'+openedNote.attr('note-id')+'"]').find('.mdl-card__title p').html(note_text_content).attr('text-align',align);
+                $('[note-id="'+openedNote.attr('note-id')+'"]').find('.mdl-card__actions .mdl-card__title').html(note_title);
                 popup.removeClass('edit');
                 popup.find('[chosen=true]').removeAttr('chosen');
+                //TODO add ajax query
             }
-            else {
+            else { //save new note
                 //TODO add ajax query
                 var new_card = $(cardHtml);
                 //TODO set unique id
+                var id = Math.random();
+                new_card.attr('note-id', id);
                 new_card.find('.mdl-card__title p').html(note_text_content).attr('text-align',popup.find('.note-text').attr('text-align'));
                 new_card.find('.mdl-card__actions .mdl-card__title').html(note_title);
-                $('.page-content').prepend(new_card);
+                new_card.find('.note-options-button').attr('id','a-'+id);
+                new_card.find('.mdl-menu').attr('for','a-'+id);
+                $('#all.page-content').prepend(new_card);
+                var copy = new_card.clone();
+                copy.find('.note-options-button').attr('id','p-'+id);
+                copy.find('.mdl-menu').attr('for','p-'+id);
+                $('#inprocess.page-content').prepend(copy);
                 componentHandler.upgradeDom();
                 wireEvents();
-                popup.toggleClass('is-visible').removeClass('edit').removeClass('test');
+                popup.toggleClass('is-visible').removeClass('edit').removeClass('test').removeClass('new-note');
                 popup.find('[chosen=true]').removeAttr('chosen');
             }
         }
@@ -136,28 +154,28 @@ $(document).ready(function () {
             var note_title = openedNote.find('.mdl-card__actions .mdl-card__title');
             popup.find('.note-title input').val(note_title.text().trim());
             popup.find('.note-text').val(note_text_content.html()).attr('text-align', note_text_content.attr('text-align'));
-            popup.find('.note-title input').attr('disabled','disabled');
-            popup.find('.note-text').attr('disabled','disabled');
+            popup.find('.note-title input').attr('readonly','readonly');
+            popup.find('.note-text').attr('readonly','readonly');
             popup.removeClass('edit');
             popup.find('[chosen=true]').removeAttr('chosen');
         }
         else  {
-            popup.toggleClass('is-visible').removeClass('edit').removeClass('test');
+            popup.toggleClass('is-visible').removeClass('edit').removeClass('test').removeClass('new-note');
             popup.find('[chosen=true]').removeAttr('chosen');
         }
     });
     $('#popup-mark').on('click', function () {
-        //TODO add ajax query
-        setIndicator(openedNote.find('.indicator').attr('percent','100'));
-        setTimeout(function () {
-            openedNote.find('.mark-op').remove();
-        }, 100);
+        markNote(openedNote);
+        popup.toggleClass('is-visible').removeClass('edit').removeClass('test').removeClass('new-note');
+        popup.find('[chosen=true]').removeAttr('chosen');
     });
     $('#popup-delete').on('click', function () {
-        //TODO add ajax query
         deleteNote(openedNote);
-        popup.toggleClass('is-visible').removeClass('edit').removeClass('test');
+        popup.toggleClass('is-visible').removeClass('edit').removeClass('test').removeClass('new-note');
         popup.find('[chosen=true]').removeAttr('chosen');
+    });
+    $('#popup-train').on('click', function () {
+        train();
     });
     $('#popup-test').on('click', function () {
         if (streamer == null)
@@ -202,7 +220,7 @@ $(document).ready(function () {
             is_listening = false;
             $(this).html('<i class="material-icons">mic_none</i>').removeAttr('chosen').removeClass('pulse-button');
             $(this).parent().attr('data-balloon','Dictate');
-            streamer.pause();
+            streamer.stop();
         }
     });
     $('#test-cancel').on('click',function () {
@@ -210,15 +228,37 @@ $(document).ready(function () {
         var note_title = openedNote.find('.mdl-card__actions .mdl-card__title');
         popup.find('.note-title input').val(note_title.text().trim());
         popup.find('.note-text').val(note_text_content.html()).attr('text-align', note_text_content.attr('text-align'));
-        popup.find('.note-title input').attr('disabled','disabled');
-        popup.find('.note-text').attr('disabled','disabled').attr('placeholder', 'Text');
-        popup.removeClass('test');
-        streamer.abort();
+        popup.find('.note-title input').attr('readonly','readonly');
+        popup.find('.note-text').attr('readonly','readonly').attr('placeholder', 'Text');
+        popup.removeClass('test').removeClass('test-res');
+        popup.find('.result, .percent').remove();
+        if (streamer != null)
+            streamer.abort();
+    });
+    $('#train-cancel').on('click',function () {
+        popup.find('.words *, .text *').remove();
+        popup.find('.text').html('');
+        popup.removeClass('train');
+    });
+    $('#train-hint').on('click',function () {
+        var next_word = popup.find('.text .word:not(.revealed)').first();
+        // next_word.html(next_word.attr('word')).addClass('revealed');
+        checkWord($('.words [word="'+next_word.attr('word')+'"]').first());
     });
     $('#test-restart').on('click',function () {
         streamer.abort();
         popup.find('.note-text').val('');
+        popup.removeClass('test-res');
+        popup.find('.result, .percent').remove();
     });
+    $('#test-check').on('click',function () {
+        if (streamer != null)
+            streamer.stop();
+        var original_text = openedNote.find('.mdl-card__title p').html();
+        var typed_text = popup.find('.note-text').val();
+        checkTest(original_text,typed_text);
+    });
+
     $('#text-align-center').on('click', function () {
         popup.find('.note-text').attr('text-align', 'center');
         $(this).attr('chosen','true');
@@ -247,7 +287,37 @@ $(document).ready(function () {
         $('.page-content').removeClass('is-selected');
         $('#learned').addClass('is-selected');
     });
+    addFileUpload();
 });
+
+function addFileUpload() {
+    if (!window.FileReader) { //if API is not supported in the browser
+        $('#file-upload').remove();
+    }
+    else {
+        var fileInput = $('#file-upload-input');
+        var uploadButton = $('#file-upload-btn');
+        uploadButton.click(function() {
+            fileInput.click();
+        });
+        fileInput.on('change', function() {
+            var input = fileInput.get(0);
+            // Create a reader object
+            var reader = new FileReader();
+            if (input.files.length) {
+                popup.find('.note-title input').val(input.files[0].name.substr(0,input.files[0].name.lastIndexOf('.')));
+                var textFile = input.files[0];
+                reader.readAsText(textFile);
+                $(reader).on('load', function(e) {
+                    var file = e.target.result;
+                    if (file && file.length) {
+                        popup.find('.note-text').val(file);
+                    }
+                });
+            }
+        });
+    }
+}
 
 function setIndicator(indicator) {
     var percent = indicator.attr('percent');
@@ -301,10 +371,7 @@ function wireEvents() {
     $('.mark-op:not(.wired-to-events)').on('click',function () {
         //TODO add ajax query
         var target = $(this).parents('.mdl-card');
-        setIndicator(target.find('.indicator').attr('percent', '100'));
-        setTimeout(function () {
-            target.find('.mark-op').remove();
-        }, 100);
+        markNote(target);
     }).each(function () {
         $(this).addClass('wired-to-events');
     });
@@ -314,32 +381,62 @@ function wireEvents() {
         openNote(target);
         test();
         popup.toggleClass('is-visible');
-    })
+    }).each(function () {
+        $(this).addClass('wired-to-events');
+    });
+
+    $('.train-op:not(.wired-to-events)').on('click',function () {
+        var target = $(this).parents('.mdl-card');
+        openNote(target);
+        train();
+        popup.toggleClass('is-visible');
+    }).each(function () {
+        $(this).addClass('wired-to-events');
+    });
+
+    $('.mark-op:not(.wired-to-events)').on('click',function () {
+        var target = $(this).parents('.mdl-card');
+        openNote(target);
+        markNote(openedNote);
+        popup.toggleClass('is-visible');
+    }).each(function () {
+        $(this).addClass('wired-to-events');
+    });
 }
 
 function openNote(noteCard) {
     openedNote = noteCard;
+    popup.find('.note-options>*').removeClass('hidden');
     if (openedNote != null)
     {
         var note_text_content = openedNote.find('.mdl-card__title p');
         var note_title = openedNote.find('.mdl-card__actions .mdl-card__title');
         popup.find('.note-title input').val(note_title.text().trim());
         popup.find('.note-text').val(note_text_content.html()).attr('text-align', note_text_content.attr('text-align'));
+        if (openedNote.find('.indicator').attr('percent') == 100)
+        {
+            popup.addClass('learned');
+        }
     }
     else {
+        popup.addClass('new-note');
         popup.find('.note-title input').val('');
         popup.find('.note-text').val('').attr('text-align', 'left');
     }
 }
 
+var time = 0;
+
 function deleteNote(noteCard) {
-    noteToDelete = noteCard;
-    noteToDelete.addClass('hidden');
+    var noteToDelete = noteCard;
+    $('[note-id="'+noteToDelete.attr('note-id')+'"]').addClass('deleted');
+    console.log(time);
+    time += 3000;
     snackbarContainer.MaterialSnackbar.showSnackbar({
         message: 'Note was deleted',
         timeout: 3000,
         actionHandler: function () {
-            noteToDelete.removeClass('hidden');
+            $('[note-id="'+noteToDelete.attr('note-id')+'"]').removeClass('deleted');
             noteToDelete = null;
             $(snackbarContainer).removeClass('mdl-snackbar--active');
         },
@@ -349,23 +446,232 @@ function deleteNote(noteCard) {
        if (noteToDelete != null)
        {
            //TODO add ajax query
-           noteToDelete.remove();
+           $('[note-id="'+noteToDelete.attr('note-id')+'"]').remove();
        }
-    }, 3000);
+    }, time);
+    setTimeout(function () {
+        time -= 3000;
+    }, 3000)
+}
+
+function markNote(noteCard) {
+    var noteToMark = noteCard;
+    //hide note from in process section
+    $('.page-content').find('[note-id="'+noteToMark.attr('note-id')+'"]').addClass('learned');
+    //work with note in all section
+    var percent = noteCard.find('.indicator').attr('percent');
+    setIndicator($('#all.page-content').find('[note-id="'+noteCard.attr('note-id')+'"]').find('.indicator').attr('percent', '100'));
+    // $('#all.page-content').find('[note-id="'+noteCard.attr('note-id')+'"]').find('.mdl-menu__item:not(.delete-op)').addClass('hidden');
+    var learned_card = $(cardHtml);
+    learned_card.attr('note-id', noteCard.attr('note-id'));
+    learned_card.find('.mdl-card__title p').html(noteCard.find('.mdl-card__title p').html())
+        .attr('text-align',noteCard.find('.mdl-card__title p').attr('text-align'));
+    learned_card.find('.mdl-card__actions .mdl-card__title').html(noteCard.find('.mdl-card__actions .mdl-card__title').html());
+    learned_card.find('.note-options-button').attr('id','l-'+noteCard.attr('note-id'));
+    learned_card.find('.mdl-menu').attr('for','l-'+noteCard.attr('note-id'));
+    learned_card.find('.mdl-menu__item:not(.delete-op)').remove();
+    learned_card.find('.indicator').attr('percent',100);
+    $('#learned.page-content').prepend(learned_card);
+    componentHandler.upgradeDom();
+    wireEvents();
+    time += 3000;
+    snackbarContainer.MaterialSnackbar.showSnackbar({
+        message: 'Note was added to learned',
+        timeout: 3000,
+        actionHandler: function () {
+            $('[note-id="'+noteToMark.attr('note-id')+'"]').removeClass('learned');
+            $('#learned.page-content').find('[note-id="'+noteToMark.attr('note-id')+'"]').remove();
+            setIndicator($('#all.page-content').find('[note-id="'+noteCard.attr('note-id')+'"]').find('.indicator').attr('percent', percent));
+            // $('#all.page-content').find('[note-id="'+noteCard.attr('note-id')+'"]').find('.mdl-menu__item:not(.delete-op)').removeClass('hidden');
+            noteToMark = null;
+            $(snackbarContainer).removeClass('mdl-snackbar--active');
+        },
+        actionText: 'Undo'
+    });
+    setTimeout(function () {
+        if (noteToMark != null)
+        {
+            //TODO add ajax query
+            $('#inprocess.page-content').find('[note-id="'+noteToMark.attr('note-id')+'"]').remove();
+            $('#all.page-content').find('[note-id="'+noteCard.attr('note-id')+'"]').find('.mdl-menu__item:not(.delete-op)').remove();
+        }
+    }, time);
+    setTimeout(function () {
+        time -= 3000;
+    }, 3000)
 }
 
 function edit() {
     popup.addClass('edit');
-    popup.find('.note-title input').removeAttr('disabled');
-    popup.find('.note-text').removeAttr('disabled');
+    popup.find('.note-title input').removeAttr('readonly');
+    popup.find('.note-text').removeAttr('readonly');
     popup.find('#text-align-' + popup.find('.note-text').attr('text-align')).attr('chosen', 'true');
 }
 
 function test() {
     popup.addClass('test');
-    popup.find('.note-text').val('').removeAttr('disabled').attr('placeholder','Type text here');
+    popup.find('.note-text').val('').removeAttr('readonly').attr('placeholder','Type text here');
 }
 
-function checkDictation() {
-    
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
+
+function checkWord(word,check) {
+    var next_word = popup.find('.text .word:not(.revealed)').first();
+    console.log('');
+    if (!check || word.html() == next_word.attr('word').toLowerCase()) {
+        next_word.html(next_word.attr('word')).addClass('revealed');
+        word.remove();
+        if (popup.find('.words .word').length == 0)
+        {
+            train_text_pos++;
+            if (train_text.length == train_text_pos)
+            {
+                //exit training mode
+                snackbarContainer.MaterialSnackbar.showSnackbar({
+                    message: 'Good job'
+                });
+                setTimeout(function () {
+                    popup.removeClass('train');
+                }, 1000);
+            }
+            else {
+                addWords(train_text[train_text_pos]);
+            }
+        }
+    }
+    else {
+        word.addClass('wrong');
+        setTimeout(function () {
+            word.removeClass('wrong');
+        },100);
+    }
+}
+
+function addWords(text) {
+    popup.find('.words *, .text *').remove();
+    popup.find('.text').html('');
+    var text_split = text.replace(/[^A-Za-zЁА-яёа-я0-9\s]/g,' ').split(/\s/);
+    var words = [];
+    for(var i = 0; i < text_split.length; i++)
+    {
+        if (text_split[i] != '')
+        {
+            words.push(text_split[i]);
+        }
+    }
+    shuffle(words);
+    for(var i = 0; i < words.length; i++)
+    {
+        popup.find('.words').append('<span class="word" word="'+words[i]+'">'+ words[i].toLowerCase() +'</span>')
+    }
+    popup.find('.words .word').on('click', function () {
+        checkWord($(this),true);
+    });
+    var replaced = text.replace(/([A-Za-zЁА-яёа-я0-9])+/g,function (match) {
+        return '<span class="word">'+ match + '</span>';
+    });
+    popup.find('.text').html(replaced);
+    popup.find('.text .word').each(function () {
+        $(this).attr('word',$(this).html());
+    });
+    setTimeout(function () {
+        $('.text .word').each(function () {
+            $(this).width($(this).width()).html(' ');
+        })
+    },1000);
+}
+
+var train_text;
+var train_text_pos;
+
+function train() {
+    var text = popup.find('.note-text');
+    popup.find('.text').attr('text-align',text.attr('text-align'));
+    var newline_pos = text.val().search(/\n[\s*]*\n/);
+    if (newline_pos > -1)
+    {
+        train_text = text.val().split(/\n[\s*]*\n/);
+    }
+    else {
+        train_text = text.val().split(/[.][\s]*/);
+        for(var i = 0; i < train_text.length; i++)
+            train_text[i] = train_text[i] + '.';
+    }
+    train_text_pos = 0;
+    addWords(train_text[0]);
+    popup.addClass('train');
+}
+
+function checkTest(original_text,typed_text) {
+    var original_split = original_text.replace(/[^A-Za-zЁА-яёа-я0-9\s]/g,'').split(/\s/);
+    var original_words = [];
+    for(var i = 0; i < original_split.length; i++)
+    {
+        if (original_split[i] != '')
+            original_words.push(original_split[i].toLowerCase());
+    }
+    var typed_split = typed_text.replace(/[^A-Za-zЁА-яёа-я0-9\s]/g,'').split(/\s/);
+    var typed_words = [];
+    for(var i = 0; i < typed_split.length; i++)
+    {
+        if (typed_split[i] != '')
+            typed_words.push(typed_split[i].toLowerCase());
+    }
+    var sm = new difflib.SequenceMatcher(original_words, typed_words);
+
+    var opcodes = sm.get_opcodes();
+    console.log(opcodes);
+    //generate difference review
+    var pos = 0;
+    var res = original_text;
+    for (var i = 0; i < opcodes.length; i++)
+    {
+        for (var j = opcodes[i][1]; j < opcodes[i][2];j++)
+        {
+            var replace = true;
+            res = res.replace(new RegExp(original_words[j], 'gi'),function (match, offset) {
+                if (offset >= pos && replace)
+                {
+                    replace = false;
+                    switch (opcodes[i][0]) {
+                        case 'equal':
+                            pos = offset + match.length;
+                            return match;
+                        case 'delete':
+                            pos = offset + match.length + 17;
+                            return '<b class="r">' + match + '</b>';
+                        case 'replace':
+                            pos = offset + match.length + 17;
+                            return '<b class="y">' + match + '</b>';
+                    }
+                }
+                else return match;
+            });
+        }
+    }
+    popup.addClass('test-res');
+    var result_view = $('<p class="result"></p>')
+        .attr('text-align',popup.find('.note-text').attr('text-align'))
+        .html(res);
+    $('.note-text-container').append(result_view);
+    var percent = Math.round(sm.ratio()*100);
+    console.log(percent);
+    var percent_view = $('<div class="percent">Percent of match: ' + percent + '%</div>');
+    if (percent < 50)
+        percent_view.addClass('r');
+    else if (percent > 50 && percent < 80)
+        percent_view.addClass('y');
+    else
+        percent_view.addClass('g');
+    $('.note-title').append(percent_view);
+    //TODO: Add ajax query
 }
