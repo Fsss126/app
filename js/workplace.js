@@ -26,7 +26,7 @@ var cardHtml = '<div class="demo-card-event mdl-card mdl-shadow--2dp mdl-cell--1
 
 //Yandex SpeechKit API key
 var apikey = 'c1b28824-ccd0-41e2-9efa-4b07b4d031b5';
-//
+//SpeechRecognition object
 var streamer;
 var is_listening;
 var snackbarContainer;
