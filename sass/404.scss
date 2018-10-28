@@ -1,0 +1,28 @@
+#section {
+  background: url(../img/road.svg) no-repeat center;
+  background-size: cover;
+
+  h1 {
+    display: block;
+  }
+
+  a {
+    width: fit-content;
+    display: block;
+    margin: 60px auto 0;
+
+    button.mdl-button {
+      margin: 0;
+      background-color: white;
+      color: black;
+      padding: 20px 0;
+      height: auto;
+      white-space: pre-line;
+      letter-spacing: 4px;
+      line-height: 25px;
+      &.mdl-button--accent .mdl-ripple {
+        background: black;
+      }
+    }
+  }
+}

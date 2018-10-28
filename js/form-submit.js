@@ -67,9 +67,6 @@ $(document).ready(function () {
                     filled = false;
                     var input = $(inputs[i]);
                     input.parent().addClass('is-invalid');
-                    // input.change(function () {
-                    //     $(this).parents('.unset').removeClass('unset');
-                    // })
                 }
             }
             if (filled)
